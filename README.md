@@ -20,10 +20,9 @@ See `install.sh -h` for command line options.
 
 The following operating systems are officially supported and automatically being tested against:
 
-| Ubuntu 16.04 | ![ubuntu](https://badges.herokuapp.com/travis/bauerj/electrumx-installer?env=IMAGE=%22ubuntu:16.04%22&label=ubuntu:16.04) |
+| OS | Status |
 |----------|---|
 | Debian Jessie | ![debian](https://badges.herokuapp.com/travis/bauerj/electrumx-installer?env=IMAGE=%22debian:8%22&label=debian:8) |
-|----------|---|
-
+| Ubuntu 16.04 | ![ubuntu](https://badges.herokuapp.com/travis/bauerj/electrumx-installer?env=IMAGE=%22ubuntu:16.04%22&label=ubuntu:16.04) |
 
 More will follow.
