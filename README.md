@@ -17,7 +17,13 @@ Clone the repository and run `install.sh` as root:
 See `install.sh -h` for command line options.
      
 ## Operating System Compatibility
-It currently works on:
-- Ubuntu 16.04 LTS
+
+The following operating systems are officially supported and automatically being tested against:
+
+| Ubuntu 16.04 | ![ubuntu](https://badges.herokuapp.com/travis/bauerj/electrumx-installer?env=IMAGE=%22ubuntu:16.04%22&label=ubuntu:16.04) |
+|----------|---|
+| Debian Jessie | ![debian](https://badges.herokuapp.com/travis/bauerj/electrumx-installer?env=IMAGE=%22debian:8%22&label=debian:8) |
+|----------|---|
+
 
 More will follow.
