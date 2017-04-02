@@ -73,10 +73,12 @@ else
 	exit 2
 fi
 
-if [ -f ./distributions/$NAME.sh ]; then
+NAME=$(echo $NAME | tr -cd '[[:alnum:]]._-')
+
+if [ -f "./distributions/$NAME.sh" ]; then
 	. ./distributions/$NAME.sh
 else
-	error "$NAME is not supported"
+	error "'$NAME' is not yet supported"
 	exit 3
 fi
 
