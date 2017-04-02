@@ -4,11 +4,7 @@ fi
 
 . distributions/base.sh
 
-if which apt > /dev/null 2>&1; then
-	APT="apt"
-else
-	APT="apt-get"
-fi
+APT="apt-get"
 
 
 function add_user {
@@ -16,6 +12,8 @@ function add_user {
 }
 
 function install_python36 {
+	$APT update
+	$APT install -y software-properties-common wget
 	add-apt-repository -y ppa:jonathonf/python-3.6
 	$APT update
 	$APT install -y python3.6 python3.6-dev
