@@ -1,0 +1,16 @@
+sudo: required
+
+language: bash
+
+services:
+  - docker
+
+before_install:
+  - docker -v
+
+script:
+  - test/test_with_docker.sh
+
+env:
+  - IMAGE="ubuntu:16.04"
+  - IMAGE="debian:8"
