@@ -92,13 +92,13 @@ if [ $UPDATE_ONLY == 0 ]; then
 	info "Creating database directory in $DB_DIR"
 	create_db_dir $DB_DIR
 
-	if which python3 > /dev/null 2>&1 && [[ $(python3 -V) == *"Python 3.6"* ]]; then
+	if [[ $(python3 -V 2>&1) == *"Python 3.6"* ]] > /dev/null 2>&1; then
 		info "Python 3.6 is already installed."
 	else
 		info "Installing Python 3.6"
 		install_python36
 	fi
-	if which python3 > /dev/null 2>&1 && [[ $(python3 -V) == *"Python 3.6"* ]]; then
+	if [[ $(python3 -V 2>&1) == *"Python 3.6"* ]] > /dev/null 2>&1; then
 		info "Python 3.6 successfully installed"
 	else
 		error "Unable to install Python 3.6"
