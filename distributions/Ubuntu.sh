@@ -17,13 +17,9 @@ function install_python36 {
 }
 
 function install_rocksdb {
-	$APT install -y librocksdb-dev 
+	$APT install -y librocksdb-dev build-essential libsnappy-dev zlib1g-dev libbz2-dev libgflags-dev
 }
 
 function install_leveldb {
 	$APT install -y libleveldb-dev
-}
-
-function install_rocksdb_dependencies {
-	$APT install -y libsnappy-dev zlib1g-dev libbz2-dev libgflags-dev
 }
