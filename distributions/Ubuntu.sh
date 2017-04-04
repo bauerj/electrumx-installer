@@ -6,12 +6,6 @@ fi
 . distributions/base-systemd.sh
 . distributions/base-debianoid.sh
 
-APT="apt-get"
-
-
-function add_user {
-	adduser --no-create-home --disabled-login --gecos "" electrumx
-}
 
 function install_python36 {
 	$APT update
@@ -22,16 +16,14 @@ function install_python36 {
 	ln -s $(which python3.6) /usr/local/bin/python3
 }
 
-function install_pyrocksdb {
-	$APT install -y libsnappy-dev zlib1g-dev libbz2-dev libgflags-dev librocksdb-dev build-essential
-	python3 -m pip install "Cython>=0.20"
-	python3 -m pip install git+git://github.com/stephan-hof/pyrocksdb.git
+function install_rocksdb {
+	$APT install -y librocksdb-dev 
 }
 
 function install_leveldb {
-	$APT install -y libleveldb-dev build-essential
+	$APT install -y libleveldb-dev
 }
 
-function install_git {
-	$APT install -y git
+function install_rocksdb_dependencies {
+	$APT install -y libsnappy-dev zlib1g-dev libbz2-dev libgflags-dev
 }

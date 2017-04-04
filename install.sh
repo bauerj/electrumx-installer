@@ -112,6 +112,7 @@ if [ $UPDATE_ONLY == 0 ]; then
 	fi
 
 	if [ $USE_ROCKSDB == 1 ]; then
+		install_rocksdb
 		install_pyrocksdb
 		assert_pyrocksdb
 	else

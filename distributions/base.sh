@@ -34,3 +34,12 @@ function install_pip {
 	python3 /tmp/get-pip.py
 	rm /tmp/get-pip.py
 }
+
+function install_pyrocksdb {
+	python3 -m pip install "Cython>=0.20"
+	python3 -m pip install git+git://github.com/stephan-hof/pyrocksdb.git
+}
+
+function add_user {
+	useradd electrumx
+}
