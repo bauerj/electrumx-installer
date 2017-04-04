@@ -1,5 +1,5 @@
 if [ "$VERSION_ID" != "16.04" ]; then
-	warning "Only the latest LTS version (16.04) is officially supported (but this will probably work)"
+	_warning "Only the latest LTS version (16.04) is officially supported (but this will probably work)"
 fi
 
 . distributions/base.sh

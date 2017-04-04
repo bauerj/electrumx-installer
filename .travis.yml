@@ -14,3 +14,4 @@ script:
 env:
   - IMAGE="ubuntu:16.04"
   - IMAGE="debian:8"
+  - IMAGE="centos:7"

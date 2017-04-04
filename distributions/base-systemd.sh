@@ -1,6 +1,6 @@
 function install_init {
 	if [ ! -d /etc/systemd/system ]; then
-		error "/etc/systemd/system does not exist. Is systemd installed?"
+		_error "/etc/systemd/system does not exist. Is systemd installed?"
 		exit 8
 	fi
 	cp /tmp/electrumx/contrib/systemd/electrumx.service /etc/systemd/system/electrumx.service

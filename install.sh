@@ -44,20 +44,20 @@ HELP
 done
 
 
-function error {
+function _error {
 	printf "${RED}ERROR:${NC}   ${1}\n" 1>&2
 }
 
-function warning {
+function _warning {
 	printf "${YELLOW}WARNING:${NC} ${1}\n" 1>&2
 }
 
-function info {
+function _info {
 	printf "${BLUE}INFO:${NC}    ${1}\n" 1>&2
 }
 
 if [[ $EUID -ne 0 ]]; then
-   error "This script must be run as root (e.g. sudo -H $0)"
+   _error "This script must be run as root (e.g. sudo -H $0)"
    exit 1
 fi
 
@@ -69,7 +69,7 @@ if [ -f /etc/os-release ]; then
 elif [ -f /etc/issue ]; then
 	NAME=$(cat /etc/issue | head -n +1 | awk '{print $1}')
 else
-	error "Unable to identify Operating System"
+	_error "Unable to identify Operating System"
 	exit 2
 fi
 
@@ -78,7 +78,7 @@ NAME=$(echo $NAME | tr -cd '[[:alnum:]]._-')
 if [ -f "./distributions/$NAME.sh" ]; then
 	. ./distributions/$NAME.sh
 else
-	error "'$NAME' is not yet supported"
+	_error "'$NAME' is not yet supported"
 	exit 3
 fi
 
@@ -87,21 +87,21 @@ if [ $UPDATE_ONLY == 0 ]; then
 		error "electrumx is already installed"
 		exit 9
 	fi
-	info "Adding new user for electrumx"
+	_info "Adding new user for electrumx"
 	add_user
-	info "Creating database directory in $DB_DIR"
+	_info "Creating database directory in $DB_DIR"
 	create_db_dir $DB_DIR
 
 	if [[ $(python3 -V 2>&1) == *"Python 3.6"* ]] > /dev/null 2>&1; then
-		info "Python 3.6 is already installed."
+		_info "Python 3.6 is already installed."
 	else
-		info "Installing Python 3.6"
+		_info "Installing Python 3.6"
 		install_python36
 	fi
 	if [[ $(python3 -V 2>&1) == *"Python 3.6"* ]] > /dev/null 2>&1; then
-		info "Python 3.6 successfully installed"
+		_info "Python 3.6 successfully installed"
 	else
-		error "Unable to install Python 3.6"
+		_error "Unable to install Python 3.6"
 		exit 4
 	fi
 
@@ -141,8 +141,8 @@ if [ $UPDATE_ONLY == 0 ]; then
 ░░▀▀▀▀░░░░░░░░░░░░░░░░░░░░░░█▄▄▄▄▄▄▄▄▄██
 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 MEME
-	info "electrumx has been installed successfully. Edit /etc/electrumx.conf to configure it."
+	_info "electrumx has been installed successfully. Edit /etc/electrumx.conf to configure it."
 else
-	info "Updating electrumx"
+	_info "Updating electrumx"
 	install_electrumx
 fi

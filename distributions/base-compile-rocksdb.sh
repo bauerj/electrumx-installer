@@ -1,6 +1,6 @@
 function install_rocksdb {
 	if ! declare -f install_rocksdb_dependencies > /dev/null; then
-		error "install_rocksdb_dependencies needs to be declared in order to use compile-rocksdb/install_rocksdb"
+		_error "install_rocksdb_dependencies needs to be declared in order to use compile-rocksdb/install_rocksdb"
 		exit 3
 	fi
 	install_rocksdb_dependencies

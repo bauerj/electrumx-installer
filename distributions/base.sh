@@ -1,13 +1,13 @@
 # Contains functions that should work on all POSIX-compliant systems
 function create_db_dir {
-	info "Creating database directory $1"
+	_info "Creating database directory $1"
 	mkdir $1
 	chown electrumx:electrumx $1
 }
 
 function assert_pyrocksdb {
 	if ! python3 -B -c "import rocksdb"; then
-		error "pyrocksdb installation doesn't work"
+		_error "pyrocksdb installation doesn't work"
 		exit 6
 	fi
 }
@@ -23,7 +23,7 @@ function install_electrumx {
 	fi
 	python3 setup.py install > /dev/null 2>&1
 	if ! python3 setup.py install; then
-		error "Unable to install electrumx"
+		_error "Unable to install electrumx"
 		exit 7
 	fi
 	cd $_DIR
