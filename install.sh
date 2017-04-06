@@ -49,9 +49,13 @@ done
 
 
 function _error {
-	echo "---- ERROR OUTPUT: ----" >&4
+	echo -en "\n---- LOG OUTPUT BELOW ----\n" >&4
 	tail -n 50 /tmp/electrumx-installer-$$.log >&4
+	echo -en "\n---- LOG OUTPUT ABOVE ----\n" >&4
 	printf "\r${RED}ERROR:${NC}   ${1}\n" >&4
+	if (( ${2:--1} > -1 )); then
+		exit $2
+	fi
 }
 
 function _warning {
@@ -63,12 +67,14 @@ function _info {
 }
 
 function _status {
-	echo -e "\r$1\n" >&3
+	echo -en "\r$1" >&3
+	printf "%-75s" " " >&3
+	echo -en "\n" >&3
 	_progress
 }
 
 _progress_count=0
-_progress_total=7
+_progress_total=8
 function _progress {
 	_progress_count=$(( $_progress_count + 1 ))
 	_pstr="[=======================================================================]"
@@ -77,8 +83,7 @@ function _progress {
 }
 
 if [[ $EUID -ne 0 ]]; then
-   _error "This script must be run as root (e.g. sudo -H $0)"
-   exit 1
+   _error "This script must be run as root (e.g. sudo -H $0)" 1
 fi
 
 cd "$(dirname "$0")"
@@ -89,8 +94,7 @@ if [ -f /etc/os-release ]; then
 elif [ -f /etc/issue ]; then
 	NAME=$(cat /etc/issue | head -n +1 | awk '{print $1}')
 else
-	_error "Unable to identify Operating System"
-	exit 2
+	_error "Unable to identify Operating System" 2
 fi
 
 NAME=$(echo $NAME | tr -cd '[[:alnum:]]._-')
@@ -98,15 +102,14 @@ NAME=$(echo $NAME | tr -cd '[[:alnum:]]._-')
 if [ -f "./distributions/$NAME.sh" ]; then
 	. ./distributions/$NAME.sh
 else
-	_error "'$NAME' is not yet supported"
-	exit 3
+	_error "'$NAME' is not yet supported" 3
 fi
 
 if [ $UPDATE_ONLY == 0 ]; then
 	if which electrumx_server.py > /dev/null 2>&1; then
-		_error "electrumx is already installed"
-		exit 9
+		_error "electrumx is already installed" 9
 	fi
+	_status "Installing installer dependencies"
 	install_script_dependencies
 	_status "Adding new user for electrumx"
 	add_user
@@ -122,8 +125,7 @@ if [ $UPDATE_ONLY == 0 ]; then
 	if [[ $(python3 -V 2>&1) == *"Python 3.6"* ]] > /dev/null 2>&1; then
 		_info "Python 3.6 successfully installed"
 	else
-		_error "Unable to install Python 3.6"
-		exit 4
+		_error "Unable to install Python 3.6" 4
 	fi
 
 	_status "Installing git"
@@ -156,26 +158,6 @@ if [ $UPDATE_ONLY == 0 ]; then
 
 	_status "Generating TLS certificates"
 	generate_cert
-	cat >&3 <<MEME
-	
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░░░░░░░▄▄▀▀▀▀▀▀▀▀▀▀▄▄█▄░░░░▄░░░░█░░░░░░░
-░░░░░░█▀░░░░░░░░░░░░░▀▀█▄░░░▀░░░░░░░░░▄░
-░░░░▄▀░░░░░░░░░░░░░░░░░▀██░░░▄▀▀▀▄▄░░▀░░
-░░▄█▀▄█▀▀▀▀▄░░░░░░▄▀▀█▄░▀█▄░░█▄░░░▀█░░░░
-░▄█░▄▀░░▄▄▄░█░░░▄▀▄█▄░▀█░░█▄░░▀█░░░░█░░░
-▄█░░█░░░▀▀▀░█░░▄█░▀▀▀░░█░░░█▄░░█░░░░█░░░
-██░░░▀▄░░░▄█▀░░░▀▄▄▄▄▄█▀░░░▀█░░█▄░░░█░░░
-██░░░░░▀▀▀░░░░░░░░░░░░░░░░░░█░▄█░░░░█░░░
-██░░░░░░░░░░░░░░░░░░░░░█░░░░██▀░░░░█▄░░░
-██░░░░░░░░░░░░░░░░░░░░░█░░░░█░░░░░░░▀▀█▄
-██░░░░░░░░░░░░░░░░░░░░█░░░░░█░░░░░░░▄▄██
-░██░░░░░░░░░░░░░░░░░░▄▀░░░░░█░░░░░░░▀▀█▄
-░▀█░░░░░░█░░░░░░░░░▄█▀░░░░░░█░░░░░░░▄▄██
-░▄██▄░░░░░▀▀▀▄▄▄▄▀▀░░░░░░░░░█░░░░░░░▀▀█▄
-░░▀▀▀▀░░░░░░░░░░░░░░░░░░░░░░█▄▄▄▄▄▄▄▄▄██
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-MEME
 	_info "electrumx has been installed successfully. Edit /etc/electrumx.conf to configure it."
 else
 	_info "Updating electrumx"

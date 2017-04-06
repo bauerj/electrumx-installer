@@ -1,7 +1,6 @@
 # Contains functions that should work on all POSIX-compliant systems
 function create_db_dir {
-	_info "Creating database directory $1"
-	mkdir $1
+	mkdir -p $1
 	chown electrumx:electrumx $1
 }
 
@@ -23,8 +22,7 @@ function install_electrumx {
 	fi
 	python3 setup.py install > /dev/null 2>&1
 	if ! python3 setup.py install; then
-		_error "Unable to install electrumx"
-		exit 7
+		_error "Unable to install electrumx" 7
 	fi
 	cd $_DIR
 }
@@ -37,16 +35,18 @@ function install_pip {
 
 function install_pyrocksdb {
 	python3 -m pip install "Cython>=0.20"
-	python3 -m pip install git+git://github.com/stephan-hof/pyrocksdb.git
+	python3 -m pip install git+git://github.com/stephan-hof/pyrocksdb.git || _error "Could not install pyrocksdb" 1
 }
 
 function add_user {
 	useradd electrumx
+	id -u electrumx || _error "Could not add user account" 1
 }
 
 function generate_cert {
 	if ! which openssl > /dev/null 2>&1; then
 		_info "OpenSSL not found. Skipping certificates.."
+		return
 	fi
 	_DIR=$(pwd)
 	mkdir -p /etc/electrumx/

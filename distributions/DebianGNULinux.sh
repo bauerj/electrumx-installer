@@ -11,5 +11,5 @@ fi
 APT="apt-get"
 
 function install_leveldb {
-	$APT install -y libleveldb-dev build-essential
+	$APT install -y libleveldb-dev build-essential || _error "Could not install packages" 1
 }
