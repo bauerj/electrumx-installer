@@ -4,14 +4,17 @@ fi
 
 function install_compiler {
 	yum update
-	yum -y install gcc-c++ wget bzip2
+	yum -y install gcc-c++ bzip2
+}
+
+function install_script_dependencies {
+	yum -y install wget openssl
 }
 
 . distributions/base.sh
 . distributions/base-systemd.sh
 . distributions/base-conda.sh
 . distributions/base-compile-rocksdb.sh
-
 
 
 function install_leveldb {

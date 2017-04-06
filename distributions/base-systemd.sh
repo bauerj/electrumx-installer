@@ -11,5 +11,5 @@ function install_init {
 	systemctl daemon-reload
 	systemctl enable electrumx
 	systemctl status electrumx
-	info "Use service electrumx start to start electrumx once it's configured"
+	_info "Use service electrumx start to start electrumx once it's configured"
 }

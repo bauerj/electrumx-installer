@@ -87,6 +87,7 @@ if [ $UPDATE_ONLY == 0 ]; then
 		error "electrumx is already installed"
 		exit 9
 	fi
+	install_script_dependencies
 	_info "Adding new user for electrumx"
 	add_user
 	_info "Creating database directory in $DB_DIR"
@@ -122,6 +123,8 @@ if [ $UPDATE_ONLY == 0 ]; then
 	install_electrumx
 
 	install_init
+
+	generate_cert
 	cat <<MEME
 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 ░░░░░░░▄▄▀▀▀▀▀▀▀▀▀▀▄▄█▄░░░░▄░░░░█░░░░░░░

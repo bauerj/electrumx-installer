@@ -43,3 +43,23 @@ function install_pyrocksdb {
 function add_user {
 	useradd electrumx
 }
+
+function generate_cert {
+	if ! which openssl > /dev/null 2>&1; then
+		_info "OpenSSL not found. Skipping certificates.."
+	fi
+	_DIR=$(pwd)
+	mkdir -p /etc/electrumx/
+	cd /etc/electrumx
+	openssl genrsa -des3 -passout pass:x -out server.pass.key 2048
+	openssl rsa -passin pass:x -in server.pass.key -out server.key
+	rm server.pass.key
+	openssl req -new -key server.key -batch -out server.csr
+	openssl x509 -req -days 1825 -in server.csr -signkey server.key -out server.crt
+	rm server.csr
+	chown electrumx:electrumx /etc/electrumx -R
+	chmod 600 /etc/electrumx/server*
+	cd $_DIR
+	echo "SSL_CERTFILE=/etc/electrumx/server.key" >> /etc/electrumx.conf
+	echo "SSL_KEYFILE=/etc/electrumx/server.key" >> /etc/electrumx.conf
+}

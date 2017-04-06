@@ -11,6 +11,7 @@ You need to define the following functions in your distribution file:
 - **install_pyrocksdb**: Install pyrocksdb.
 - **install_leveldb**: Install libleveldb and its development headers
 - **install_init**: Integrate electrumx into the init system and enable it (if necessary).
+- **install_script_dependencies**: Install wget and openssl (if available).
 
 The following functions also need to be defined, but you can source them from `base.sh`:
 - create_db_dir(db): Create the database directory and change ownership to the electrumx user
