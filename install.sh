@@ -9,11 +9,15 @@ DB_DIR="/db"
 UPDATE_ONLY=0
 USE_ROCKSDB=1
 
+# redirect child output
+rm /tmp/electrumx-installer-$$.log > /dev/null 2>&1
+exec 3>&1 4>&2 2>/tmp/electrumx-installer-$$.log >&2
+
 while [[ $# -gt 0 ]]; do
 	key="$1"
 	case $key in
 		-h|--help)
-		cat <<HELP
+		cat >&4 <<HELP
 Usage: install.sh [OPTIONS]
 
 Install electrumx.
@@ -36,7 +40,7 @@ HELP
 	    USE_ROCKSDB=0
 	    ;;
 	    *)
-	    warning "Unknown option $key"
+	    _warning "Unknown option $key"
 	    exit 12
 	    ;;
 	esac
@@ -45,15 +49,31 @@ done
 
 
 function _error {
-	printf "${RED}ERROR:${NC}   ${1}\n" 1>&2
+	echo "---- ERROR OUTPUT: ----" >&4
+	tail -n 50 /tmp/electrumx-installer-$$.log >&4
+	printf "\r${RED}ERROR:${NC}   ${1}\n" >&4
 }
 
 function _warning {
-	printf "${YELLOW}WARNING:${NC} ${1}\n" 1>&2
+	printf "\r${YELLOW}WARNING:${NC} ${1}\n" >&3
 }
 
 function _info {
-	printf "${BLUE}INFO:${NC}    ${1}\n" 1>&2
+	printf "\r${BLUE}INFO:${NC}    ${1}\n" >&3
+}
+
+function _status {
+	echo -e "\r$1\n" >&3
+	_progress
+}
+
+_progress_count=0
+_progress_total=7
+function _progress {
+	_progress_count=$(( $_progress_count + 1 ))
+	_pstr="[=======================================================================]"
+	_pd=$(( $_progress_count * 73 / $_progress_total ))
+	printf "\r%3d.%1d%% %.${_pd}s" $(( $_progress_count * 100 / $_progress_total )) $(( ($_progress_count * 1000 / $_progress_total) % 10 )) $_pstr >&3
 }
 
 if [[ $EUID -ne 0 ]]; then
@@ -84,19 +104,19 @@ fi
 
 if [ $UPDATE_ONLY == 0 ]; then
 	if which electrumx_server.py > /dev/null 2>&1; then
-		error "electrumx is already installed"
+		_error "electrumx is already installed"
 		exit 9
 	fi
 	install_script_dependencies
-	_info "Adding new user for electrumx"
+	_status "Adding new user for electrumx"
 	add_user
-	_info "Creating database directory in $DB_DIR"
+	_status "Creating database directory in $DB_DIR"
 	create_db_dir $DB_DIR
 
 	if [[ $(python3 -V 2>&1) == *"Python 3.6"* ]] > /dev/null 2>&1; then
 		_info "Python 3.6 is already installed."
 	else
-		_info "Installing Python 3.6"
+		_status "Installing Python 3.6"
 		install_python36
 	fi
 	if [[ $(python3 -V 2>&1) == *"Python 3.6"* ]] > /dev/null 2>&1; then
@@ -106,26 +126,38 @@ if [ $UPDATE_ONLY == 0 ]; then
 		exit 4
 	fi
 
+	_status "Installing git"
 	install_git
 
 	if ! python3 -m pip > /dev/null 2>&1; then
+		_progress_total=$(( $_progress_total + 2 ))
+		_status "Installing pip"
 		install_pip
 	fi
 
 	if [ $USE_ROCKSDB == 1 ]; then
+		_progress_total=$(( $_progress_total + 2 ))
+		_status "Installing RocksDB"
 		install_rocksdb
+		_status "Installing pyrocksdb"
 		install_pyrocksdb
+		_status "Checking pyrocksdb installation"
 		assert_pyrocksdb
 	else
+		_status "Installing leveldb"
 		install_leveldb
 	fi
 
+	_status "Installing electrumx"
 	install_electrumx
 
+	_status "Installing init scripts"
 	install_init
 
+	_status "Generating TLS certificates"
 	generate_cert
-	cat <<MEME
+	cat >&3 <<MEME
+	
 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 ░░░░░░░▄▄▀▀▀▀▀▀▀▀▀▀▄▄█▄░░░░▄░░░░█░░░░░░░
 ░░░░░░█▀░░░░░░░░░░░░░▀▀█▄░░░▀░░░░░░░░░▄░
