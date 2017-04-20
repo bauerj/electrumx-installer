@@ -60,6 +60,6 @@ function generate_cert {
 	chown electrumx:electrumx /etc/electrumx -R
 	chmod 600 /etc/electrumx/server*
 	cd $_DIR
-	echo "SSL_CERTFILE=/etc/electrumx/server.key" >> /etc/electrumx.conf
+	echo "SSL_CERTFILE=/etc/electrumx/server.crt" >> /etc/electrumx.conf
 	echo "SSL_KEYFILE=/etc/electrumx/server.key" >> /etc/electrumx.conf
 }
