@@ -13,6 +13,7 @@ function assert_pyrocksdb {
 
 function install_electrumx {
 	_DIR=$(pwd)
+        python3 -m pip install multidict || true
 	rm -rf "/tmp/electrumx/"
 	git clone https://github.com/kyuupichan/electrumx /tmp/electrumx
 	cd /tmp/electrumx
