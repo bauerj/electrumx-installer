@@ -49,9 +49,11 @@ done
 
 
 function _error {
-	echo -en "\n---- LOG OUTPUT BELOW ----\n" >&4
-	tail -n 50 /tmp/electrumx-installer-$$.log >&4
-	echo -en "\n---- LOG OUTPUT ABOVE ----\n" >&4
+        if [ -s /tmp/electrumx-installer-$$.log ]; then
+	  echo -en "\n---- LOG OUTPUT BELOW ----\n" >&4
+	  tail -n 50 /tmp/electrumx-installer-$$.log >&4
+	  echo -en "\n---- LOG OUTPUT ABOVE ----\n" >&4
+        fi
 	printf "\r${RED}ERROR:${NC}   ${1}\n" >&4
 	if (( ${2:--1} > -1 )); then
 		exit $2
@@ -107,7 +109,7 @@ fi
 
 if [ $UPDATE_ONLY == 0 ]; then
 	if which electrumx_server.py > /dev/null 2>&1; then
-		_error "electrumx is already installed" 9
+		_error "electrumx is already installed. Use $0 --update to... update." 9
 	fi
 	_status "Installing installer dependencies"
 	install_script_dependencies
@@ -162,4 +164,5 @@ if [ $UPDATE_ONLY == 0 ]; then
 else
 	_info "Updating electrumx"
 	install_electrumx
+        _info "Installed $(python3 -m pip freeze | grep electrumx)"
 fi
