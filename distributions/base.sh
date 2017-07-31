@@ -52,8 +52,8 @@ function generate_cert {
 	_DIR=$(pwd)
 	mkdir -p /etc/electrumx/
 	cd /etc/electrumx
-	openssl genrsa -des3 -passout pass:x -out server.pass.key 2048
-	openssl rsa -passin pass:x -in server.pass.key -out server.key
+	openssl genrsa -des3 -passout pass:xxxx -out server.pass.key 2048
+	openssl rsa -passin pass:xxxx -in server.pass.key -out server.key
 	rm server.pass.key
 	openssl req -new -key server.key -batch -out server.csr
 	openssl x509 -req -days 1825 -in server.csr -signkey server.key -out server.crt
