@@ -3,7 +3,7 @@ if [ "$VERSION_ID" != "7" ]; then
 fi
 
 function install_compiler {
-	yum update
+	yum -y update
 	yum -y install gcc-c++ bzip2 || _error "Could not install packages" 1
 }
 
@@ -11,6 +11,7 @@ function install_script_dependencies {
 	yum -y install wget openssl
 }
 
+PATH=$PATH:/usr/local/bin
 . distributions/base.sh
 . distributions/base-systemd.sh
 . distributions/base-conda.sh
