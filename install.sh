@@ -160,6 +160,11 @@ if [ $UPDATE_ONLY == 0 ]; then
 
 	_status "Generating TLS certificates"
 	generate_cert
+
+	if declare -f package_cleanup > /dev/null; then
+		_status "Cleaning up"
+		package_cleanup	
+	fi
 	_info "electrumx has been installed successfully. Edit /etc/electrumx.conf to configure it."
 else
 	_info "Updating electrumx"
