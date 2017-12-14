@@ -16,7 +16,7 @@ while [[ $# -gt 0 ]]; do
 	key="$1"
 	case $key in
 		-h|--help)
-		cat <<HELP
+		cat >&2 <<HELP
 Usage: install.sh [OPTIONS]
 
 Install electrumx.
@@ -49,7 +49,7 @@ HELP
             shift
             ;;
 	    *)
-	    _warning "Unknown option $key"
+	    echo "WARNING: Unknown option $key" >&2
 	    exit 12
 	    ;;
 	esac
