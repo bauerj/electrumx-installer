@@ -9,15 +9,12 @@ DB_DIR="/db"
 UPDATE_ONLY=0
 USE_ROCKSDB=1
 
-# redirect child output
-rm /tmp/electrumx-installer-$$.log > /dev/null 2>&1
-exec 3>&1 4>&2 2>/tmp/electrumx-installer-$$.log >&2
 
 while [[ $# -gt 0 ]]; do
 	key="$1"
 	case $key in
 		-h|--help)
-		cat >&4 <<HELP
+		cat <<HELP
 Usage: install.sh [OPTIONS]
 
 Install electrumx.
@@ -46,6 +43,22 @@ HELP
 	esac
 	shift # past argument or value
 done
+
+cd "$(dirname "$0")"
+
+# Self-update
+if which git > /dev/null 2>&1; then
+    _version_now=$(git rev-parse HEAD)
+    git pull > /dev/null 2>&1
+    if [ $_version_now != $(git rev-parse HEAD) ]; then
+        echo "Updated installer."
+        exec $0 "$@"
+    fi
+fi
+
+# redirect child output
+rm /tmp/electrumx-installer-$$.log > /dev/null 2>&1
+exec 3>&1 4>&2 2>/tmp/electrumx-installer-$$.log >&2
 
 
 function _error {
@@ -87,8 +100,6 @@ function _progress {
 if [[ $EUID -ne 0 ]]; then
    _error "This script must be run as root (e.g. sudo -H $0)" 1
 fi
-
-cd "$(dirname "$0")"
 
 if [ -f /etc/os-release ]; then
 	# Load release information
