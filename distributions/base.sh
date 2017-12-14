@@ -15,8 +15,9 @@ function install_electrumx {
 	_DIR=$(pwd)
         python3 -m pip install multidict || true
 	rm -rf "/tmp/electrumx/"
-	git clone https://github.com/kyuupichan/electrumx /tmp/electrumx
+	git clone $ELECTRUMX_GIT_URL /tmp/electrumx
 	cd /tmp/electrumx
+        git checkout $ELECTRUMX_GIT_BRANCH
 	if [ $USE_ROCKSDB == 1 ]; then
 		# We don't necessarily want to install plyvel
 		sed -i "s/'plyvel',//" setup.py

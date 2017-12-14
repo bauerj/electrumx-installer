@@ -8,6 +8,8 @@ NC='\033[0m' # No Color
 DB_DIR="/db"
 UPDATE_ONLY=0
 USE_ROCKSDB=1
+ELECTRUMX_GIT_URL="https://github.com/kyuupichan/electrumx"
+ELECTRUMX_GIT_BRANCH="master"
 
 
 while [[ $# -gt 0 ]]; do
@@ -19,10 +21,12 @@ Usage: install.sh [OPTIONS]
 
 Install electrumx.
 
- -h --help   Show this help
- -d --dbdir  Set database directory (default: /db/)
- --update    Update previously installed version
- --leveldb   Use LevelDB instead of RocksDB
+ -h --help                     Show this help
+ -d --dbdir dir                Set database directory (default: /db/)
+ --update                      Update previously installed version
+ --leveldb                     Use LevelDB instead of RocksDB
+--electrumx-git-url url        Install ElectrumX from this URL instead
+--electrumx-git-branch branch  Install specific branch of ElectrumX repository
 HELP
 		exit 0
 		;;
@@ -36,6 +40,14 @@ HELP
 	    --leveldb)
 	    USE_ROCKSDB=0
 	    ;;
+            --electrumx-git-url)
+            ELECTRUMX_GIT_URL="$2"
+            shift
+            ;;
+            --electrumx-git-branch)
+            ELECTRUMX_GIT_BRANCH="$2"
+            shift
+            ;;
 	    *)
 	    _warning "Unknown option $key"
 	    exit 12
