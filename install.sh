@@ -109,6 +109,8 @@ function _progress {
 	printf "\r%3d.%1d%% %.${_pd}s" $(( $_progress_count * 100 / $_progress_total )) $(( ($_progress_count * 1000 / $_progress_total) % 10 )) $_pstr >&3
 }
 
+rocksdb_compile=1
+
 if [[ $EUID -ne 0 ]]; then
    _error "This script must be run as root (e.g. sudo -H $0)" 1
 fi
@@ -163,13 +165,28 @@ if [ $UPDATE_ONLY == 0 ]; then
 	fi
 
 	if [ $USE_ROCKSDB == 1 ]; then
-		_progress_total=$(( $_progress_total + 2 ))
-		_status "Installing RocksDB"
-		install_rocksdb
+	    _progress_total=$(( $_progress_total + 2 ))
+        _status "Installing RocksDB"
+        if [ ! -z $has_rocksdb_binary ]; then
+            binary_install_rocksdb
+        else
+            install_rocksdb
+        fi
 		_status "Installing pyrocksdb"
 		install_pyrocksdb
 		_status "Checking pyrocksdb installation"
-		assert_pyrocksdb
+		if [ ! check_pyrocksdb ]; then
+            if [ ! -z $has_rocksdb_binary ]; then
+                _status "binary rocksdb doesn't work - compiling instead"
+                binary_uninstall_rocksdb
+                install_rocksdb
+                if [ ! check_pyrocksdb ]; then
+                    _error "pyrocksdb installation still doesn't work" 7
+                fi
+            else
+                _error "pyrocksdb installation doesn't work" 6
+            fi
+		fi
 	else
 		_status "Installing leveldb"
 		install_leveldb

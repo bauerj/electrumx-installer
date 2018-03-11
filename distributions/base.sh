@@ -4,11 +4,8 @@ function create_db_dir {
 	chown electrumx:electrumx $1
 }
 
-function assert_pyrocksdb {
-	if ! python3 -B -c "import rocksdb"; then
-		_error "pyrocksdb installation doesn't work"
-		exit 6
-	fi
+function check_pyrocksdb {
+    python3 -B -c "import rocksdb"
 }
 
 function install_electrumx {

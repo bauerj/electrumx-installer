@@ -5,7 +5,9 @@ fi
 . distributions/base.sh
 . distributions/base-systemd.sh
 . distributions/base-debianoid.sh
+. distributions/base-compile-rocksdb.sh
 
+has_rocksdb_binary=1
 
 function install_python36 {
 	$APT update
@@ -16,8 +18,12 @@ function install_python36 {
 	ln -s $(which python3.6) /usr/local/bin/python3
 }
 
-function install_rocksdb {
+function binary_install_rocksdb {
 	$APT install -y librocksdb-dev build-essential libsnappy-dev zlib1g-dev libbz2-dev libgflags-dev || _error "Could not install packages" 1
+}
+
+function binary_uninstall_rocksdb {
+    $APT remove  -y librocksdb-dev || _error "Could not remove rocksdb" 1
 }
 
 function install_leveldb {
