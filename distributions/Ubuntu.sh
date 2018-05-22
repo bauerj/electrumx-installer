@@ -15,9 +15,12 @@ function install_python36 {
 	  $APT install -y software-properties-common || _error "Could not install package" 5
 	  add-apt-repository -y ppa:jonathonf/python-3.6
 	  $APT update
+	  packages="python3.6 python3.6-dev"
+	else
+	  packages="python3-pip python3.6-dev"
 	fi
-	$APT install -y python3.6 python3.6-dev || _error "Could not install package python3.6" 1
-	ln -s $(which python3.6) /usr/local/bin/python3
+	$APT install -y $packages || _error "Could not install package python3.6" 1
+	ln -s $(which python3.6) /usr/local/bin/python3 > /dev/null
 }
 
 function binary_install_rocksdb {
