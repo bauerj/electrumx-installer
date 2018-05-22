@@ -172,8 +172,13 @@ if [ $UPDATE_ONLY == 0 ]; then
         else
             install_rocksdb
         fi
-		_status "Installing pyrocksdb"
-		install_pyrocksdb
+                if [ -z $newer_rocksdb ]; then
+			 _status "Installing pyrocksdb"
+			install_pyrocksdb
+		else
+			 _status "Installing python_rocksdb"
+			install_python_rocksdb
+		fi
 		_status "Checking pyrocksdb installation"
 		if [ ! check_pyrocksdb ]; then
             if [ ! -z $has_rocksdb_binary ]; then

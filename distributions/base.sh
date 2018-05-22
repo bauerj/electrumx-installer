@@ -37,6 +37,11 @@ function install_pyrocksdb {
 	python3 -m pip install git+git://github.com/stephan-hof/pyrocksdb.git || _error "Could not install pyrocksdb" 1
 }
 
+function install_python_rocksdb {
+        python3 -m pip install "Cython>=0.20"
+	python3 -m pip install python-rocksdb || _error "Could not install python_rocksdb" 1
+}
+
 function add_user {
 	useradd electrumx
 	id -u electrumx || _error "Could not add user account" 1
@@ -65,3 +70,5 @@ function generate_cert {
         echo "SSL_PORT=50002" >> /etc/electrumx.conf
         echo -e "# Listen on all interfaces:\nHOST=" >> /etc/electrumx.conf
 }
+
+function ver { printf "%03d%03d%03d%03d" $(echo "$1" | tr '.' ' '); }
