@@ -225,6 +225,7 @@ else
 	if grep '/usr/local/bin/electrumx_server.py' /etc/systemd/system/electrumx.service; then
 	    _info "Updating pre-1.5 systemd configuration to new binary names"
 		sed -i -- 's/_server.py/_server/g' /etc/systemd/system/electrumx.service
+		systemctl daemon-reload
 	fi
 	install_electrumx
         _info "Installed $(python3 -m pip freeze | grep -i electrumx)"
