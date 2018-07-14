@@ -11,6 +11,17 @@ USE_ROCKSDB=1
 ELECTRUMX_GIT_URL="https://github.com/kyuupichan/electrumx"
 ELECTRUMX_GIT_BRANCH="master"
 
+cd "$(dirname "$0")"
+
+# Self-update
+if which git > /dev/null 2>&1; then
+    _version_now=$(git rev-parse HEAD)
+    git pull > /dev/null 2>&1
+    if [ $_version_now != $(git rev-parse HEAD) ]; then
+        echo "Updated installer."
+        exec $0 "$@"
+    fi
+fi
 
 while [[ $# -gt 0 ]]; do
 	key="$1"
@@ -55,18 +66,6 @@ HELP
 	esac
 	shift # past argument or value
 done
-
-cd "$(dirname "$0")"
-
-# Self-update
-if which git > /dev/null 2>&1; then
-    _version_now=$(git rev-parse HEAD)
-    git pull > /dev/null 2>&1
-    if [ $_version_now != $(git rev-parse HEAD) ]; then
-        echo "Updated installer."
-        exec $0 "$@"
-    fi
-fi
 
 # redirect child output
 rm /tmp/electrumx-installer-$$.log > /dev/null 2>&1
