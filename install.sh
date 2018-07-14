@@ -213,6 +213,7 @@ if [ $UPDATE_ONLY == 0 ]; then
 	_info "electrumx has been installed successfully. Edit /etc/electrumx.conf to configure it."
 else
 	_info "Updating electrumx"
+	pip uninstall -y electrumx || true
 	install_electrumx
-        _info "Installed $(python3 -m pip freeze | grep electrumx)"
+        _info "Installed $(python3 -m pip freeze | grep -i electrumx)"
 fi
