@@ -134,7 +134,7 @@ else
 fi
 
 if [ $UPDATE_ONLY == 0 ]; then
-	if which electrumx_server.py > /dev/null 2>&1; then
+	if which electrumx_server > /dev/null 2>&1; then
 		_error "electrumx is already installed. Use $0 --update to... update." 9
 	fi
 	_status "Installing installer dependencies"
@@ -222,6 +222,10 @@ else
 	        break
 	    fi
 	done
+	if grep '/usr/local/bin/electrumx_server.py' /etc/systemd/system/electrumx.service; then
+	    _info "Updating pre-1.5 systemd configuration to new binary names"
+		sed -i -- 's/_server.py/_server/g' /etc/systemd/system/electrumx.service
+	fi
 	install_electrumx
         _info "Installed $(python3 -m pip freeze | grep -i electrumx)"
 fi

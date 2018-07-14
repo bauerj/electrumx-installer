@@ -7,5 +7,5 @@ if [ -e "./test/preinstall/$IMAGE" ]; then
 fi
 
 ./install.sh
-electrumx_server.py
+electrumx_server
 
