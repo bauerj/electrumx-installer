@@ -214,7 +214,14 @@ if [ $UPDATE_ONLY == 0 ]; then
 	_info "electrumx has been installed successfully. Edit /etc/electrumx.conf to configure it."
 else
 	_info "Updating electrumx"
-	pip uninstall -y electrumx || true
+	i=0
+	while python3 -m pip show electrumx; do
+	    python3 -m pip uninstall -y electrumx || true
+	    ((i++))
+	    if "$i" -gt 5; then
+	        break
+	    fi
+	done
 	install_electrumx
         _info "Installed $(python3 -m pip freeze | grep -i electrumx)"
 fi
