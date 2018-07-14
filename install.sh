@@ -11,6 +11,8 @@ USE_ROCKSDB=1
 ELECTRUMX_GIT_URL="https://github.com/kyuupichan/electrumx"
 ELECTRUMX_GIT_BRANCH="master"
 
+installer=$(realpath $0)
+
 cd "$(dirname "$0")"
 
 # Self-update
@@ -19,7 +21,7 @@ if which git > /dev/null 2>&1; then
     git pull > /dev/null 2>&1
     if [ $_version_now != $(git rev-parse HEAD) ]; then
         echo "Updated installer."
-        exec $0 "$@"
+        exec $installer "$@"
     fi
 fi
 
