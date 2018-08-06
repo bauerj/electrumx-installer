@@ -10,7 +10,6 @@ function check_pyrocksdb {
 
 function install_electrumx {
 	_DIR=$(pwd)
-        python3 -m pip install multidict || true
 	rm -rf "/tmp/electrumx/"
 	git clone $ELECTRUMX_GIT_URL /tmp/electrumx
 	cd /tmp/electrumx
@@ -19,8 +18,8 @@ function install_electrumx {
 		# We don't necessarily want to install plyvel
 		sed -i "s/'plyvel',//" setup.py
 	fi
-	python3 setup.py install > /dev/null 2>&1
-	if ! python3 setup.py install; then
+	python3 -m pip install . --upgrade > /dev/null 2>&1
+	if ! python3 -m pip install . --upgrade; then
 		_error "Unable to install electrumx" 7
 	fi
 	cd $_DIR
