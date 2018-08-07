@@ -6,7 +6,7 @@ if that file exists or the first word from `/etc/issue`.
 ## Implement the functions
 You need to define the following functions in your distribution file:
 - **add_user**: Create a user called `electrumx`
-- **install_python36**: Install Python 3.6. The first `python3` in `$PATH` should resolve to it.
+- **install_$python7**: Install Python 3.7. The first `$python` in `$PATH` should resolve to it.
 - **install_git**: Install git
 - **install_pyrocksdb**: Install pyrocksdb.
 - **install_leveldb**: Install libleveldb and its development headers

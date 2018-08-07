@@ -13,18 +13,12 @@ fi
 
 has_rocksdb_binary=1
 
-function install_python36 {
+function install_python37 {
+	$APT install -y software-properties-common || _error "Could not install package" 5
+	add-apt-repository -y ppa:deadsnakes/ppa
 	$APT update
-	if [ "$VERSION_ID" == "16.04" ]; then
-	  $APT install -y software-properties-common || _error "Could not install package" 5
-	  add-apt-repository -y ppa:jonathonf/python-3.6
-	  $APT update
-	  packages="python3.6 python3.6-dev"
-	else
-	  packages="python3-pip python3.6-dev"
-	fi
-	$APT install -y $packages || _error "Could not install package python3.6" 1
-	ln -s $(which python3.6) /usr/local/bin/python3 > /dev/null
+	packages="python3.7 python3.7-dev python3.7-distutils"
+	$APT install -y $packages || _error "Could not install package python3.7" 1
 }
 
 function binary_install_rocksdb {
