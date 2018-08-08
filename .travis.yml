@@ -13,6 +13,7 @@ script:
 
 env:
   - IMAGE="ubuntu:16.04"
+  - IMAGE="fedora:28"
   - IMAGE="debian:8"
   - IMAGE="centos:7"
   - IMAGE="debian:9"
