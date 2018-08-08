@@ -84,7 +84,7 @@ echo "" > /tmp/electrumx-installer-$$.log
 exec 3>&1 4>&2 2>/tmp/electrumx-installer-$$.log >&2
 
 if [ $VERBOSE == 1 ]; then
-	tail -f /tmp/electrumx-installer-$$.log &
+	tail -f /tmp/electrumx-installer-$$.log >&4 &
 fi
 
 
