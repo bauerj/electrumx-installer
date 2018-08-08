@@ -147,6 +147,14 @@ else
 	_error "'$NAME' is not yet supported" 3
 fi
 
+python=""
+
+for _python in python3.7 python3; do
+	if which $_python; then
+	python=$_python
+	fi
+done
+
 if [ $UPDATE_ONLY == 0 ]; then
 	if which electrumx_server > /dev/null 2>&1; then
 		_error "electrumx is already installed. Use $0 --update to... update." 9
@@ -157,14 +165,6 @@ if [ $UPDATE_ONLY == 0 ]; then
 	add_user
 	_status "Creating database directory in $DB_DIR"
 	create_db_dir $DB_DIR
-
-	python=""
-
-	for _python in python3.7 python3; do
-		if which $_python; then
-		python=$_python
-		fi
-	done
 
 	if [[ $($python -V 2>&1) == *"Python 3.6"* ]] > /dev/null 2>&1; then
 		_info "Python 3.6 is already installed."
