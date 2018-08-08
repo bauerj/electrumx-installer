@@ -7,12 +7,13 @@ function install_electrumx {
 	ln -s /opt/python/bin/electrumx* /usr/local/bin/
 }
 
-function install_python36 {
+function install_python37 {
 	if ! declare -f install_compiler > /dev/null; then
-		_error "install_compiler needs to be declared in order to use conda/install_python36" 3
+		_error "install_compiler needs to be declared in order to use conda/install_python37" 3
 	fi
 	install_compiler
 	wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/conda.sh || _error "while getting conda" 1
     bash /tmp/conda.sh -b -p /opt/python
-	ln -s /opt/python/bin/python3 /usr/local/bin/python3
+	/opt/python/bin/conda install python=3.7
+	ln -s /opt/python/bin/python3 /usr/local/bin/python3.7
 }

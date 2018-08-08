@@ -10,8 +10,7 @@ function install_script_dependencies {
 	REPO="http://dl-cdn.alpinelinux.org/alpine/edge/testing"
 	grep -q -F "${REPO}" /etc/apk/repositories || echo "${REPO}" >> /etc/apk/repositories
 	apk update
-	$APK add leveldb
-	$APK add --virtual electrumX-dep openssl wget gcc g++ leveldb-dev
+	$APK add --virtual electrumX-dep openssl wget gcc g++
 }
 
 function add_user {
@@ -19,15 +18,16 @@ function add_user {
 	id -u electrumx || _error "Could not add user account" 1
 }
 
-function install_python36 {
-	$APK add python3
-	$APK add --virtual electrumX-python python3-dev
-	python3 -m pip install plyvel || _error "Could not install plyvel" 1
-	ln -s $(which python3.6) /usr/local/bin/python3
+function install_python37 {
+	_error "Please install Python 3.7 manually"
 }
 
 function install_git {
 	$APK add --virtual electrumX-git git
+}
+
+function install_compiler {
+	$APK add gcc
 }
 
 function install_rocksdb {

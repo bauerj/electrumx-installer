@@ -16,5 +16,4 @@ env:
   - IMAGE="debian:8"
   - IMAGE="centos:7"
   - IMAGE="debian:9"
-  - IMAGE="alpine:edge"
   - IMAGE="ubuntu:18.04"
