@@ -155,24 +155,8 @@ for _python in python3.7 python3; do
 	fi
 done
 
-if [ $UPDATE_PYTHON == 1 ]; then
-	if [[ $($python -V 2>&1) == *"Python 3.7"* ]] > /dev/null 2>&1; then
-		_info "Python 3.7 is already installed."
-	else
-		_status "Installing Python 3.7"
-		python=python3.7
-		install_python37
-		if [[ $($python -V 2>&1) == *"Python 3.7"* ]] > /dev/null 2>&1; then
-			_info "Python 3.7 successfully installed"
-		else
-			_error "Unable to install Python 3.7" 4
-		fi
-	fi
-fi
-
-
-if [ $UPDATE_ONLY == 0 ]; then
-	if which electrumx_server > /dev/null 2>&1; then
+if [ $UPDATE_ONLY == 0 || $UPDATE_PYTHON == 1 ]; then
+	if which electrumx_server > /dev/null 2>&1 && [ $UPDATE_PYTHON == 0 ]; then
 		_error "electrumx is already installed. Use $0 --update to... update." 9
 	fi
 	_status "Installing installer dependencies"
@@ -182,7 +166,7 @@ if [ $UPDATE_ONLY == 0 ]; then
 	_status "Creating database directory in $DB_DIR"
 	create_db_dir $DB_DIR
 
-	if [[ $($python -V 2>&1) == *"Python 3.6"* ]] > /dev/null 2>&1; then
+	if [[ $($python -V 2>&1) == *"Python 3.6"* ]] > /dev/null 2>&1 && [ $UPDATE_PYTHON == 0 ]; then
 		_info "Python 3.6 is already installed."
 	elif [[ $($python -V 2>&1) == *"Python 3.7"* ]] > /dev/null 2>&1; then
 		_info "Python 3.7 is already installed."
@@ -202,13 +186,13 @@ if [ $UPDATE_ONLY == 0 ]; then
 	install_git
 
 	if ! $python -m pip > /dev/null 2>&1; then
-		_progress_total=$(( $_progress_total + 2 ))
+		_progress_total=$(( $_progress_total + 1 ))
 		_status "Installing pip"
 		install_pip
 	fi
 
 	if [ $USE_ROCKSDB == 1 ]; then
-	    _progress_total=$(( $_progress_total + 2 ))
+	    _progress_total=$(( $_progress_total + 3 ))
         _status "Installing RocksDB"
         if [ ! -z $has_rocksdb_binary ]; then
             binary_install_rocksdb
@@ -243,11 +227,15 @@ if [ $UPDATE_ONLY == 0 ]; then
 	_status "Installing electrumx"
 	install_electrumx
 
-	_status "Installing init scripts"
-	install_init
+	if [ $UPDATE_PYTHON == 0 ]; then
 
-	_status "Generating TLS certificates"
-	generate_cert
+		_status "Installing init scripts"
+		install_init
+
+		_status "Generating TLS certificates"
+		generate_cert
+
+	fi
 
 	if declare -f package_cleanup > /dev/null; then
 		_status "Cleaning up"
