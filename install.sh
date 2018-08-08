@@ -155,7 +155,7 @@ for _python in python3.7 python3; do
 	fi
 done
 
-if [ $UPDATE_ONLY == 0 || $UPDATE_PYTHON == 1 ]; then
+if [ $UPDATE_ONLY == 0 ] || [ $UPDATE_PYTHON == 1 ]; then
 	if which electrumx_server > /dev/null 2>&1 && [ $UPDATE_PYTHON == 0 ]; then
 		_error "electrumx is already installed. Use $0 --update to... update." 9
 	fi
