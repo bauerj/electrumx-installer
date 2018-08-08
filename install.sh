@@ -155,6 +155,22 @@ for _python in python3.7 python3; do
 	fi
 done
 
+if [ $UPDATE_PYTHON == 1 ]; then
+	if [[ $($python -V 2>&1) == *"Python 3.7"* ]] > /dev/null 2>&1; then
+		_info "Python 3.7 is already installed."
+	else
+		_status "Installing Python 3.7"
+		python=python3.7
+		install_python37
+		if [[ $($python -V 2>&1) == *"Python 3.7"* ]] > /dev/null 2>&1; then
+			_info "Python 3.7 successfully installed"
+		else
+			_error "Unable to install Python 3.7" 4
+		fi
+	fi
+fi
+
+
 if [ $UPDATE_ONLY == 0 ]; then
 	if which electrumx_server > /dev/null 2>&1; then
 		_error "electrumx is already installed. Use $0 --update to... update." 9
