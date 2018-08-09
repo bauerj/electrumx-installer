@@ -8,10 +8,9 @@ function install_rocksdb {
 	_info "Loading RocksDB source"
 	git clone https://github.com/facebook/rocksdb.git /tmp/rocksdb
 	cd /tmp/rocksdb
-	# Of course pyrocksdb wouldn't be pyrocksdb if it supported the latest version
-	git checkout v4.5.1
+	git checkout v5.14.2
 	_info "Compiling RocksDB... This will take a while."
-	make shared_lib -j 2 || _error "Could not compile rocksdb" 1
-	make install-shared INSTALL_PATH=/usr || _error "Could not install rocksdb" 1
+	make shared_lib -j 4 || _error "Could not compile rocksdb" 1
+	make install || _error "Could not install rocksdb" 1
 	cd "$_DIR"
 }

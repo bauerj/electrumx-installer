@@ -25,7 +25,7 @@ function install_git {
 function install_rocksdb_dependencies {
 	# /usr/lib is not always included?
 	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib
-	yum -y install snappy snappy-devel zlib zlib-devel bzip2-libs bzip2-devel libgflags-dev cmake make || _error "Could not install packages" 4
+	yum -y install snappy snappy-devel zlib zlib-devel bzip2-libs bzip2-devel cmake make lz4-devel || _error "Could not install packages" 4
 	_DIR=$(pwd)
 	git clone https://github.com/gflags/gflags /tmp/gflags
 	cd /tmp/gflags

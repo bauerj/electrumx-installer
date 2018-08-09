@@ -5,7 +5,14 @@ function create_db_dir {
 }
 
 function check_pyrocksdb {
-    $python -B -c "import rocksdb"
+	source=$(cat <<EOF
+		import rocksdb
+		db = rocksdb.DB("/tmp/test.db", rocksdb.Options(create_if_missing=True))
+		db.put(b'a', b'data')
+		assert(db.get(b'a') == b'data')
+EOF
+	)
+    $python -B -c $source
 }
 
 function install_electrumx {

@@ -1,9 +1,9 @@
 #!/bin/bash
 
-RED='\033[0;31m'
-YELLOW='\033[1;33m'
-BLUE='\033[0,34m'
-NC='\033[0m' # No Color
+RED='\e[31m'
+YELLOW='\e[33m'
+BLUE='\e[34m'
+NC='\e[39m' # No Color
 
 DB_DIR="/db"
 UPDATE_ONLY=0
@@ -89,11 +89,11 @@ fi
 
 
 function _error {
-        if [ -s /tmp/electrumx-installer-$$.log ]; then
-	  echo -en "\n---- LOG OUTPUT BELOW ----\n" >&4
-	  tail -n 50 /tmp/electrumx-installer-$$.log >&4
-	  echo -en "\n---- LOG OUTPUT ABOVE ----\n" >&4
-        fi
+    if [ -s /tmp/electrumx-installer-$$.log ]; then
+	    echo -en "\n---- LOG OUTPUT BELOW ----\n" >&4
+	    tail -n 100 /tmp/electrumx-installer-$$.log >&4
+	    echo -en "\n---- LOG OUTPUT ABOVE ----\n" >&4
+    fi
 	printf "\r${RED}ERROR:${NC}   ${1}\n" >&4
 	if (( ${2:--1} > -1 )); then
 		exit $2
@@ -113,6 +113,16 @@ function _status {
 	printf "%-75s" " " >&3
 	echo -en "\n" >&3
 	_progress
+}
+
+function _spin {
+	i=1
+	sp="/-\|"
+	echo -n ' '
+	while true; do
+		printf "\b${sp:i++%${#sp}:1}" >&3
+		sleep 1
+	done
 }
 
 _progress_count=0
@@ -194,30 +204,22 @@ if [ $UPDATE_ONLY == 0 ] || [ $UPDATE_PYTHON == 1 ]; then
 	if [ $USE_ROCKSDB == 1 ]; then
 	    _progress_total=$(( $_progress_total + 3 ))
         _status "Installing RocksDB"
-        if [ ! -z $has_rocksdb_binary ]; then
-            binary_install_rocksdb
-        else
-            install_rocksdb
-        fi
-            if [ -z $newer_rocksdb ]; then
-			    _status "Installing pyrocksdb"
-			install_pyrocksdb
-		else
-			 _status "Installing python_rocksdb"
-			install_python_rocksdb
+		if declare -f binary_uninstall_rocksdb > /dev/null; then
+			binary_uninstall_rocksdb	
 		fi
-		_status "Checking pyrocksdb installation"
+
+		_spin &
+		spinner=$!
+
+        install_rocksdb
+
+		kill $spinner >/dev/null 2>&1
+
+		_status "Installing python_rocksdb"
+		install_python_rocksdb
+		_status "Checking python-rocksdb installation"
 		if [ ! check_pyrocksdb ]; then
-            if [ ! -z $has_rocksdb_binary ]; then
-                _status "binary rocksdb doesn't work - compiling instead"
-                binary_uninstall_rocksdb
-                install_rocksdb
-                if [ ! check_pyrocksdb ]; then
-                    _error "pyrocksdb installation still doesn't work" 7
-                fi
-            else
-                _error "pyrocksdb installation doesn't work" 6
-            fi
+            _error "python-rocksdb installation doesn't work" 6
 		fi
 	else
 		_status "Installing leveldb"
