@@ -149,7 +149,7 @@ fi
 
 python=""
 
-for _python in python3.7 python3; do
+for _python in python3 python3.7; do
 	if which $_python; then
 	python=$_python
 	fi
