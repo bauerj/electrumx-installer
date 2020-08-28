@@ -78,9 +78,7 @@ function generate_cert {
 	cd $_DIR
 	echo -e "\nSSL_CERTFILE=/etc/electrumx/server.crt" >> /etc/electrumx.conf
 	echo "SSL_KEYFILE=/etc/electrumx/server.key" >> /etc/electrumx.conf
-        echo "TCP_PORT=50001" >> /etc/electrumx.conf
-        echo "SSL_PORT=50002" >> /etc/electrumx.conf
-        echo -e "# Listen on all interfaces:\nHOST=" >> /etc/electrumx.conf
+    echo "SERVICES=tcp://:50001,ssl://:50002,wss://:50004,rpc://" >> /etc/electrumx.conf
 }
 
 function ver { printf "%03d%03d%03d%03d" $(echo "$1" | tr '.' ' '); }
