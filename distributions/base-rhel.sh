@@ -1,6 +1,6 @@
 function install_compiler {
 	yum -y update
-	yum -y install gcc-c++ bzip2 || _error "Could not install packages" 1
+	yum -y install gcc-c++ bzip2 cmake || _error "Could not install packages" 1
 }
 
 function install_script_dependencies {

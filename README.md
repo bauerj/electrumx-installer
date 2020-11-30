@@ -30,6 +30,7 @@ The following operating systems are officially supported and automatically being
 
 | OS | Status |
 |----------|---:|
+| Ubuntu 20.04   | [![ubuntu](https://badges.herokuapp.com/travis/bauerj/electrumx-installer?env=IMAGE=%22ubuntu:20.04%22&label=ubuntu:20.04)](https://travis-ci.org/bauerj/electrumx-installer/) |
 | Ubuntu 18.04   | [![ubuntu](https://badges.herokuapp.com/travis/bauerj/electrumx-installer?env=IMAGE=%22ubuntu:18.04%22&label=ubuntu:18.04)](https://travis-ci.org/bauerj/electrumx-installer/) |
 | Debian Jessie  | [![debian](https://badges.herokuapp.com/travis/bauerj/electrumx-installer?env=IMAGE=%22debian:8%22&label=debian:8)](https://travis-ci.org/bauerj/electrumx-installer/) |
 | Fedora 29      | [![centos](https://badges.herokuapp.com/travis/bauerj/electrumx-installer?env=IMAGE=%22fedora:28%22&label=fedora:28)](https://travis-ci.org/bauerj/electrumx-installer/) |

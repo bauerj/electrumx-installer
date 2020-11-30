@@ -18,3 +18,4 @@ env:
   - IMAGE="centos:7"
   - IMAGE="debian:9"
   - IMAGE="ubuntu:18.04"
+  - IMAGE="ubuntu:20.04"
